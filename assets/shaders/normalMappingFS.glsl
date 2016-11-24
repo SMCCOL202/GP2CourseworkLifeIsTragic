@@ -28,7 +28,7 @@ uniform sampler2D normalSampler;
 
 void main()
 {
-	vec3 bumpNormals = 2.0 * texture (normalSampler ,vertexhahahaBawsTextureCoordsOut ).xyz - 1.0;
+	vec3 bumpNormals = 2.0 * texture (normalSampler ,vertexTextureCoordsOut ).xyz - 1.0;
 	
 	bumpNormals = normalize(bumpNormals);
 	
