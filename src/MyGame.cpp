@@ -19,6 +19,8 @@ void MyGame::initScene()
 {
 	string modelPath = ASSET_PATH + MODEL_PATH + "/Earth.fbx";
 
+	string modelTest = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
+
 	string vsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureVS.glsl";
 	string fsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureFS.glsl";
 	string vsNormalFilename = ASSET_PATH + SHADER_PATH + "/normalMappingVS.glsl";
@@ -36,13 +38,18 @@ void MyGame::initScene()
 	string normalTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_norm.png";
 	string parallaxTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_height.png";
 
-	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
-	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
-	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
-	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
-	m_TestGO->loadNormalTexture(normalTexturePathBricks);
+	string diffuseTexturePathBaord = ASSET_PATH + TEXTURE_PATH + "/bricks_color2.png";
+	string specularTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_spec.png";
+	string normalTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_norm.png";
+	string parallaxTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boardss_height.png";
 
-	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
+
+	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelTest));
+	m_TestGO->loadShaders(vsTextureFilename, fsTextureFilename);
+	m_TestGO->loadDiffuseTexture(diffuseTexturePathBaord);
+	m_TestGO->loadSpecularTexture(specularTexturePathBoard);
+
+	m_TestGO->setScale(vec3(0.1f, 0.1f, 0.1f));
 	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
 	m_TestGO2 = shared_ptr<GameObject>(loadModelFromFile(modelPath));
