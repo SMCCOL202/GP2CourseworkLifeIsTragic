@@ -1,4 +1,6 @@
 #include "MyGame.h"
+#include <iostream>
+#include <cmath>
 
 const std::string ASSET_PATH = "assets";
 const std::string SHADER_PATH = "/shaders";
@@ -7,7 +9,9 @@ const std::string MODEL_PATH = "/models";
 
 MyGame::MyGame()
 {
-
+	m_CameraPosition = vec3(0.0f, 0.0f, 10.0f);
+	m_CameraTarget = vec3(0.0f, 0.0f, 0.0f);
+	m_CameraDirection = normalize(m_CameraPosition - m_CameraTarget);
 }
 
 MyGame::~MyGame()
@@ -44,12 +48,13 @@ void MyGame::initScene()
 	string parallaxTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boardss_height.png";
 
 
-	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelTest));
-	m_TestGO->loadShaders(vsTextureFilename, fsTextureFilename);
-	m_TestGO->loadDiffuseTexture(diffuseTexturePathBaord);
-	m_TestGO->loadSpecularTexture(specularTexturePathBoard);
+	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
+	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
+	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
+	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
+	m_TestGO->loadNormalTexture(normalTexturePathBricks);
 
-	m_TestGO->setScale(vec3(0.1f, 0.1f, 0.1f));
+	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
 	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
 	m_TestGO2 = shared_ptr<GameObject>(loadModelFromFile(modelPath));
@@ -70,7 +75,7 @@ void MyGame::initScene()
 	m_TestGO3->setScale(vec3(0.5f, 0.5f, 0.5f));
 	m_TestGO3->setPosition(vec3(-3.0f, 0.0f, 0.0f));
 
-	m_CameraPosition = vec3(0.0f, 0.0f, 10.0f);
+	//m_CameraPosition = vec3(0.0f, 0.0f, 10.0f);
 
 	m_Light = shared_ptr<Light>(new Light());
 	m_Light->DiffuseColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -121,7 +126,8 @@ void MyGame::update()
 	GameApplication::update();
 
 	m_ProjMatrix = perspective(radians(45.0f), (float)m_WindowWidth / (float)m_WindowHeight, 0.1f, 1000.0f);
-	m_ViewMatrix = lookAt(m_CameraPosition, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	m_ViewMatrix = lookAt(vec3(0.0f, 0.0f, 10.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	//m_ViewMatrix = lookAt(m_CameraPosition, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 	m_TestGO->onUpdate();
 	m_TestGO2->onUpdate();
 	m_TestGO3->onUpdate();
@@ -189,7 +195,4 @@ void MyGame::render()
 	glUniform3fv(cameraPositionLocation3, 1, value_ptr(m_CameraPosition));
 
 	m_TestGO3->onRender(m_ViewMatrix, m_ProjMatrix);
-
-	//parallaxMappingFS 
-	//vec3 bumpNormals = 2.0 * texture (normalSampler ,vertexTexCoordsOut).xyz - 1.0;
 }
