@@ -42,19 +42,29 @@ void MyGame::initScene()
 	string normalTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_norm.png";
 	string parallaxTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_height.png";
 
-	string diffuseTexturePathBaord = ASSET_PATH + TEXTURE_PATH + "/bricks_color2.png";
+	string diffuseTexturePathBaord = ASSET_PATH + TEXTURE_PATH + "/boards_color.png";
 	string specularTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_spec.png";
-	string normalTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_norm.png";
-	string parallaxTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boardss_height.png";
+	string normalTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_normal.png";
+	string parallaxTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_height.png";
 
 
-	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
+	/*m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
 	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
 	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
 	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
 	m_TestGO->loadNormalTexture(normalTexturePathBricks);
 
 	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
+	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));*/
+
+	m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelTest));
+	m_TestGO->loadShaders(vsParallaxFilename, fsParallaxFilename);
+	m_TestGO->loadDiffuseTexture(diffuseTexturePathBaord);
+	m_TestGO->loadSpecularTexture(specularTexturePathBoard);
+	m_TestGO->loadNormalTexture(normalTexturePathBoard);
+	m_TestGO->loadHeightTexture(parallaxTexturePathBoard);
+
+	m_TestGO->setScale(vec3(0.2f, 0.2f, 0.2f));
 	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));
 
 	m_TestGO2 = shared_ptr<GameObject>(loadModelFromFile(modelPath));
@@ -75,7 +85,7 @@ void MyGame::initScene()
 	m_TestGO3->setScale(vec3(0.5f, 0.5f, 0.5f));
 	m_TestGO3->setPosition(vec3(-3.0f, 0.0f, 0.0f));
 
-	//m_CameraPosition = vec3(0.0f, 0.0f, 10.0f);
+	m_CameraPosition = vec3(0.0f, 0.0f, 25.0f);
 
 	m_Light = shared_ptr<Light>(new Light());
 	m_Light->DiffuseColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -126,8 +136,8 @@ void MyGame::update()
 	GameApplication::update();
 
 	m_ProjMatrix = perspective(radians(45.0f), (float)m_WindowWidth / (float)m_WindowHeight, 0.1f, 1000.0f);
-	m_ViewMatrix = lookAt(vec3(0.0f, 0.0f, 10.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	//m_ViewMatrix = lookAt(m_CameraPosition, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	//m_ViewMatrix = lookAt(vec3(0.0f, 0.0f, 10.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	m_ViewMatrix = lookAt(m_CameraPosition, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 	m_TestGO->onUpdate();
 	m_TestGO2->onUpdate();
 	m_TestGO3->onUpdate();
