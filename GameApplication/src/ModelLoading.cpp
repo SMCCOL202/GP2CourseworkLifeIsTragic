@@ -7,7 +7,7 @@ GameObject * loadModelFromFile(const string & filename)
 	GameObject *gameObject = new GameObject();
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 
-	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_JoinIdenticalVertices|aiProcess_Triangulate | aiProcess_FlipUVs| aiProcess_GenSmoothNormals| aiProcess_CalcTangentSpace| aiProcess_OptimizeGraph);
+	const aiScene* scene = aiImportFile(filename.c_str(), aiProcess_JoinIdenticalVertices|aiProcess_Triangulate | aiProcess_FlipUVs| aiProcess_GenSmoothNormals| aiProcess_GenUVCoords| aiProcess_CalcTangentSpace| aiProcess_OptimizeGraph);
 
 	if (scene)
 	{
