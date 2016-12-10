@@ -23,7 +23,11 @@ void MyGame::initScene()
 {
 	string modelPath = ASSET_PATH + MODEL_PATH + "/Earth.fbx";
 
+<<<<<<< HEAD
 	string modelTest = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
+=======
+	//string modelTest = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
+>>>>>>> refs/remotes/origin/master
 
 	string vsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureVS.glsl";
 	string fsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureFS.glsl";
