@@ -17,7 +17,6 @@ public:
 
 	void onKeyDown(SDL_Keycode keyCode);
 	void CamerMovement();
-	void MouseControl(double xpos, double ypos);
 
 private:
 	//matrices
@@ -25,9 +24,10 @@ private:
 	mat4 m_ProjMatrix;
 
 	GameObject *m_pGameObject;
-	shared_ptr<GameObject> m_TestGO;
-	shared_ptr<GameObject> m_TestGO2;
-	shared_ptr<GameObject> m_TestGO3;
+	//shared_ptr<GameObject> m_TestGO;
+	//shared_ptr<GameObject> m_TestGO2;
+	//shared_ptr<GameObject> m_TestGO3;
+	vector<shared_ptr<GameObject>> m_GameObjectList;
 	shared_ptr<Light> m_Light;
 	vec4 m_AmbientLightColour;
 
