@@ -3,8 +3,8 @@
 GameApplication::GameApplication()
 {
  	m_pWindow=nullptr;
-	m_WindowWidth=640;
-	m_WindowHeight=480;
+	m_WindowWidth=640;  //640
+	m_WindowHeight=480; //480
 	m_WindowCreationFlags=SDL_WINDOW_OPENGL;
 	CREATELOG("log.txt");
 	m_bIsActive=false;
@@ -187,7 +187,7 @@ void GameApplication::OnRestored()
 
 void GameApplication::update()
 {
-
+	
 }
 
 void GameApplication::OnBeginRender()

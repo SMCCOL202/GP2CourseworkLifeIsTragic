@@ -1,6 +1,4 @@
 #include "MyGame.h"
-#include <iostream>
-#include <cmath>
 
 const std::string ASSET_PATH = "assets";
 const std::string SHADER_PATH = "/shaders";
@@ -10,8 +8,20 @@ const std::string MODEL_PATH = "/models";
 MyGame::MyGame()
 {
 	m_CameraPosition = vec3(0.0f, 0.0f, 10.0f);
-	m_CameraTarget = vec3(0.0f, 0.0f, 0.0f);
-	m_CameraDirection = normalize(m_CameraPosition - m_CameraTarget);
+	m_CameraFront = vec3(0.0f, 0.0f, -1.0f);
+	m_CameraUp = vec3(0.0f, 1.0f, 0.0f);
+	cameraSpeed = 1.0f;
+
+	yaw = -90.0f;
+	pitch = 0.0f;
+	lastX = m_WindowWidth / 2;
+	lastY = m_WindowHeight / 2;
+	fov = radians(45.0f);
+
+	deltaTime = 0.0f;
+	lastFrame = 0.0f;
+
+
 }
 
 MyGame::~MyGame()
@@ -23,11 +33,7 @@ void MyGame::initScene()
 {
 	string modelPath = ASSET_PATH + MODEL_PATH + "/Earth.fbx";
 
-<<<<<<< HEAD
 	string modelTest = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
-=======
-	//string modelTest = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
->>>>>>> refs/remotes/origin/master
 
 	string vsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureVS.glsl";
 	string fsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureFS.glsl";
@@ -52,16 +58,16 @@ void MyGame::initScene()
 	string parallaxTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_height.png";
 
 
-	/*m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
+	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
 	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
 	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
 	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
 	m_TestGO->loadNormalTexture(normalTexturePathBricks);
 
 	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
-	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));*/
+	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f)); 
 
-	m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelTest));
+	/*m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelTest));
 	m_TestGO->loadShaders(vsParallaxFilename, fsParallaxFilename);
 	m_TestGO->loadDiffuseTexture(diffuseTexturePathBaord);
 	m_TestGO->loadSpecularTexture(specularTexturePathBoard);
@@ -69,7 +75,7 @@ void MyGame::initScene()
 	m_TestGO->loadHeightTexture(parallaxTexturePathBoard);
 
 	m_TestGO->setScale(vec3(0.2f, 0.2f, 0.2f));
-	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));
+	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));*/ //woodboard
 
 	m_TestGO2 = shared_ptr<GameObject>(loadModelFromFile(modelPath));
 	m_TestGO2->loadShaders(vsParallaxFilename, fsParallaxFilename);
@@ -89,8 +95,6 @@ void MyGame::initScene()
 	m_TestGO3->setScale(vec3(0.5f, 0.5f, 0.5f));
 	m_TestGO3->setPosition(vec3(-3.0f, 0.0f, 0.0f));
 
-	m_CameraPosition = vec3(0.0f, 0.0f, 25.0f);
-
 	m_Light = shared_ptr<Light>(new Light());
 	m_Light->DiffuseColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SpecularColour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -100,30 +104,68 @@ void MyGame::initScene()
 
 void MyGame::onKeyDown(SDL_Keycode keyCode)
 {
-	if (keyCode == SDLK_a)
+
+	if (keyCode == SDLK_LEFT)
 	{
 		m_TestGO->rotate(vec3(0.0f, -0.1f, 0.0f));
 		m_TestGO2->rotate(vec3(0.0f, -0.1f, 0.0f));
 		m_TestGO3->rotate(vec3(0.0f, -0.1f, 0.0f));
 	}
-	else if (keyCode == SDLK_d)
+	else if (keyCode == SDLK_RIGHT)
 	{
 		m_TestGO->rotate(vec3(0.0f, 0.1f, 0.0f));
 		m_TestGO2->rotate(vec3(0.0f, 0.1f, 0.0f));
 		m_TestGO3->rotate(vec3(0.0f, 0.1f, 0.0f));
 	}
-	if (keyCode==SDLK_w)
+	if (keyCode==SDLK_UP)
 	{
 		m_TestGO->rotate(vec3(-0.1f,0.0f,0.0f));
 		m_TestGO2->rotate(vec3(-0.1f, 0.0f, 0.0f));
 		m_TestGO3->rotate(vec3(-0.1f, 0.0f, 0.0f));
 	}
-	else if (keyCode==SDLK_s)
+	else if (keyCode==SDLK_DOWN)
 	{
 		m_TestGO->rotate(vec3(0.1f,0.0f,0.0f));
 		m_TestGO2->rotate(vec3(0.1f, 0.0f, 0.0f));
 		m_TestGO3->rotate(vec3(0.1f, 0.0f, 0.0f));
 	}
+
+	if (keyCode == SDLK_a)
+	{
+		m_CameraPosition -= normalize(cross(m_CameraFront, m_CameraUp) * cameraSpeed);
+	}
+	if (keyCode == SDLK_d)
+	{
+		m_CameraPosition += normalize(cross(m_CameraFront, m_CameraUp) * cameraSpeed);
+	}
+	if (keyCode == SDLK_w)
+	{
+		m_CameraPosition += normalize(m_CameraFront * cameraSpeed);
+	}
+	if (keyCode == SDLK_s)
+	{
+		m_CameraPosition -= normalize(m_CameraFront * cameraSpeed);
+	}
+}
+
+void MyGame::CamerMovement()
+{
+	/*if (keyCode == SDLK_a)
+	{
+		m_CameraPosition -= normalize(cross(m_CameraFront, m_CameraUp) * cameraSpeed);
+	}
+	if (keyCode == SDLK_d)
+	{
+		m_CameraPosition += normalize(cross(m_CameraFront, m_CameraUp) * cameraSpeed);
+	}
+	if (keyCode == SDLK_w)
+	{
+		m_CameraPosition += cameraSpeed * m_CameraFront;
+	}
+	if (keyCode == SDLK_s)
+	{
+		m_CameraPosition -= cameraSpeed * m_CameraFront;
+	}*/
 
 }
 
@@ -132,16 +174,60 @@ void MyGame::destroyScene()
 	m_TestGO->onDestroy();
 	m_TestGO2->onDestroy();
 	m_TestGO3->onDestroy();
+	
 
 }
 
 void MyGame::update()
 {
 	GameApplication::update();
+	
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	m_ProjMatrix = perspective(radians(45.0f), (float)m_WindowWidth / (float)m_WindowHeight, 0.1f, 1000.0f);
+	GLfloat currentFrame = SDL_GetTicks();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
+
+	cameraSpeed = 5.0f * deltaTime;
+
+	//Start move mouse code
+	int xpos, ypos;
+	SDL_GetMouseState(&xpos, &ypos);
+
+	GLfloat xOffset = xpos - lastX;
+	GLfloat yOffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+
+	GLfloat sens = 0.05f;
+	xOffset *= sens;
+	yOffset *= sens;
+
+	yaw += xOffset;
+	pitch += yOffset;
+
+	if (pitch > 89.0f)
+	{
+		pitch = 89.0f;
+	}
+	if (pitch < -89.0f)
+	{
+		pitch = -89.0f;
+	}
+
+	vec3 front;
+	front.x = cos(radians(yaw)) * cos(radians(pitch));
+	front.y = sin(radians(pitch));
+	front.z = sin(radians(yaw)) * cos(radians(pitch));
+	m_CameraFront = normalize(front);
+
+	// End move mouse code
+
+	SDL_PumpEvents();
+
+	m_ProjMatrix = perspective(fov, (float)m_WindowWidth / (float)m_WindowHeight, 0.1f, 1000.0f);
 	//m_ViewMatrix = lookAt(vec3(0.0f, 0.0f, 10.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-	m_ViewMatrix = lookAt(m_CameraPosition, vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	m_ViewMatrix = lookAt(m_CameraPosition, m_CameraPosition + m_CameraFront, m_CameraUp);
 	m_TestGO->onUpdate();
 	m_TestGO2->onUpdate();
 	m_TestGO3->onUpdate();

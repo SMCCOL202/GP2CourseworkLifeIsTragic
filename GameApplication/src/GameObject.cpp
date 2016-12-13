@@ -28,7 +28,7 @@ GameObject::GameObject()
 	m_pParent = nullptr;
 
 	//material 
-	m_AmbientMaterialColour=vec4(0.1f,0.1f,0.1f,1.0f);
+	m_AmbientMaterialColour=vec4(0.0f,0.0f,0.0f,1.0f);
 	m_DiffuseMaterialColour=vec4(0.5f,0.5f,0.5f,1.0f);
 	m_SpecularMaterialColour=vec4(1.0f,1.0f,1.0f,1.0f);
 	m_SpecularMaterialPower=25.0f;
@@ -61,11 +61,8 @@ void GameObject::onUpdate()
 void GameObject::onRender(mat4& view, mat4& projection)
 {
 	glBindVertexArray(m_VAO);
-<<<<<<< HEAD
 	glBindBuffer(GL_ARRAY_BUFFER, m_VAO);
-=======
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
->>>>>>> refs/remotes/origin/master
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	GLint MVPLocation = glGetUniformLocation(m_ShaderProgram, "MVP");

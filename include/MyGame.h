@@ -2,6 +2,7 @@
 #define _MyGame_H
 
 #include "GameApplication.h"
+#include "Camera.h"
 
 class MyGame:public GameApplication
 {
@@ -15,6 +16,9 @@ public:
 	void destroyScene();
 
 	void onKeyDown(SDL_Keycode keyCode);
+	void CamerMovement();
+	void MouseControl(double xpos, double ypos);
+
 private:
 	//matrices
 	mat4 m_ViewMatrix;
@@ -30,6 +34,17 @@ private:
 	vec3 m_CameraPosition;
 	vec3 m_CameraTarget;
 	vec3 m_CameraDirection;
+	vec3 m_CameraFront;
+	vec3 m_CameraUp;
+	GLfloat cameraSpeed;
+
+	GLfloat yaw;
+	GLfloat pitch;
+	GLfloat lastX;
+	GLfloat lastY;
+	GLfloat fov;
+	GLfloat deltaTime;
+	GLfloat lastFrame;
 
 };
 #endif
