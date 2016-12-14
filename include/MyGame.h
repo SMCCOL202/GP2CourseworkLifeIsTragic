@@ -17,6 +17,7 @@ public:
 
 	void onKeyDown(SDL_Keycode keyCode);
 	void CamerMovement();
+	void MoveMouse();
 
 private:
 	//matrices

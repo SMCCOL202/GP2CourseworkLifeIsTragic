@@ -7,9 +7,9 @@ const std::string MODEL_PATH = "/models";
 
 MyGame::MyGame()
 {
-	m_CameraPosition = vec3(0.0f, 0.0f, 10.0f);
+	m_CameraPosition = vec3(0.0f, 0.0f, 30.0f);
 	m_CameraFront = vec3(0.0f, 0.0f, -1.0f);
-	m_CameraUp = vec3(0.0f, 1.0f, 0.0f);
+	m_CameraUp = vec3(0.0f, 10.0f, 0.0f);
 	cameraSpeed = 1.0f;
 
 	yaw = -90.0f;
@@ -34,8 +34,9 @@ void MyGame::initScene()
 	//SDL_WarpMouseInWindow(m_pWindow, m_WindowWidth / 2, m_WindowHeight / 2);
 	
 	string modelPath = ASSET_PATH + MODEL_PATH + "/Earth.fbx";
-
-	string modelTest = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
+	string modelWoodboard = ASSET_PATH + MODEL_PATH + "/woodboard.fbx";
+	string modelAmmoBox = ASSET_PATH + MODEL_PATH + "/Ammo_box.fbx";
+	string modelBarrel = ASSET_PATH + MODEL_PATH + "/barrel.fbx";
 
 	string vsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureVS.glsl";
 	string fsTextureFilename = ASSET_PATH + SHADER_PATH + "/lightTextureFS.glsl";
@@ -44,61 +45,64 @@ void MyGame::initScene()
 	string vsParallaxFilename = ASSET_PATH + SHADER_PATH + "/parallaxMappingVS.glsl";
 	string fsParallaxFilename = ASSET_PATH + SHADER_PATH + "/parallaxMappingFS.glsl";
 
-	string diffuseTexturePathEarth = ASSET_PATH + TEXTURE_PATH + "/earth_diff.png";
+	/*string diffuseTexturePathEarth = ASSET_PATH + TEXTURE_PATH + "/earth_diff.png";
 	string specularTexturePathEarth = ASSET_PATH + TEXTURE_PATH + "/earth_spec.png";
 	string normalTexturePathEarth = ASSET_PATH + TEXTURE_PATH + "/earth_norm.png";
-	string parallaxTexturePathEarth = ASSET_PATH + TEXTURE_PATH + "/earth_height.png";
+	string parallaxTexturePathEarth = ASSET_PATH + TEXTURE_PATH + "/earth_height.png";*/
 
 	string diffuseTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_diff.jpg";
 	string specularTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_spec.png";
 	string normalTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_norm.png";
 	string parallaxTexturePathBricks = ASSET_PATH + TEXTURE_PATH + "/bricks_height.png";
 
-	string diffuseTexturePathBaord = ASSET_PATH + TEXTURE_PATH + "/boards_color.png";
+	string diffuseTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_color.png";
 	string specularTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_spec.png";
 	string normalTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_normal.png";
 	string parallaxTexturePathBoard = ASSET_PATH + TEXTURE_PATH + "/boards_height.png";
 
-	shared_ptr<GameObject>m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelPath));
-	m_TestGO=shared_ptr<GameObject>(loadModelFromFile(modelPath));
-	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
-	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
-	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
-	m_TestGO->loadNormalTexture(normalTexturePathBricks);
+	string diffuseTexturePathAmmoBox = ASSET_PATH + TEXTURE_PATH + "/ammo_box_color_01.png";
+	string specularTexturePathAmmoBox = ASSET_PATH + TEXTURE_PATH + "/ammo_box_spec_03.png";
+	string normalTexturePathAmmoBox = ASSET_PATH + TEXTURE_PATH + "/ammo_box_nmap_03.png";
 
-	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
-	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f)); 
+	string diffuseTexturePathBarrel = ASSET_PATH + TEXTURE_PATH + "/barrel_color_01.png";
+	string specularTexturePathBarrel = ASSET_PATH + TEXTURE_PATH + "/barrel_spec_03.png";
+	string normalTexturePathBarrel = ASSET_PATH + TEXTURE_PATH + "/barrel_nmap_03.png";
+
+	//Ammo Box Model
+	shared_ptr<GameObject>m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelAmmoBox));
+	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
+	m_TestGO->loadDiffuseTexture(diffuseTexturePathAmmoBox);
+	m_TestGO->loadSpecularTexture(specularTexturePathAmmoBox);
+	m_TestGO->loadNormalTexture(normalTexturePathAmmoBox);
+
+	m_TestGO->setScale(vec3(0.3f, 0.3f, 0.3f));
+	m_TestGO->setPosition(vec3(-15.0f, 0.0f, 0.0f)); 
+	m_TestGO->setRotation(vec3(0.0f, 200.0f, 0.0f));
 	m_GameObjectList.push_back(m_TestGO);
 
-	/*m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelTest));
+	//Woodboard Model
+	m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelWoodboard));
 	m_TestGO->loadShaders(vsParallaxFilename, fsParallaxFilename);
-	m_TestGO->loadDiffuseTexture(diffuseTexturePathBaord);
+	m_TestGO->loadDiffuseTexture(diffuseTexturePathBoard);
 	m_TestGO->loadSpecularTexture(specularTexturePathBoard);
 	m_TestGO->loadNormalTexture(normalTexturePathBoard);
 	m_TestGO->loadHeightTexture(parallaxTexturePathBoard);
 
 	m_TestGO->setScale(vec3(0.2f, 0.2f, 0.2f));
-	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));*/ //woodboard
-
-	m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelPath));
-	m_TestGO->loadShaders(vsParallaxFilename, fsParallaxFilename);
-	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
-	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
-	m_TestGO->loadNormalTexture(normalTexturePathBricks);
-	m_TestGO->loadHeightTexture(parallaxTexturePathBricks);
-
-	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
-	m_TestGO->setPosition(vec3(3.0f, 0.0f, 0.0f));
+	m_TestGO->setPosition(vec3(10.0f, 0.0f, 0.0f));
+	m_TestGO->setRotation(vec3(300.0f, 0.0f, 0.0f));
 	m_GameObjectList.push_back(m_TestGO);
 
-	m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelPath));
-	m_TestGO->loadShaders(vsTextureFilename, fsTextureFilename);
-	m_TestGO->loadDiffuseTexture(diffuseTexturePathBricks);
-	m_TestGO->loadSpecularTexture(specularTexturePathBricks);
+	//Barrel Model
+	m_TestGO = shared_ptr<GameObject>(loadModelFromFile(modelBarrel));
+	m_TestGO->loadShaders(vsNormalFilename, fsNormalFilename);
+	m_TestGO->loadDiffuseTexture(diffuseTexturePathBarrel);
+	m_TestGO->loadSpecularTexture(specularTexturePathBarrel);
+	m_TestGO->loadNormalTexture(normalTexturePathBarrel);
 
-	m_TestGO->setScale(vec3(0.5f, 0.5f, 0.5f));
-	m_TestGO->setPosition(vec3(-3.0f, 0.0f, 0.0f));
-
+	m_TestGO->setScale(vec3(0.1f, 0.1f, 0.1f));
+	m_TestGO->setPosition(vec3(0.0f, 0.0f, 0.0f));
+	
 	m_GameObjectList.push_back(m_TestGO);
 
 	m_Light = shared_ptr<Light>(new Light());
@@ -148,53 +152,23 @@ void MyGame::onKeyDown(SDL_Keycode keyCode)
 	{
 		m_CameraPosition -= normalize(m_CameraFront * cameraSpeed);
 	}
+
 }
 
 void MyGame::CamerMovement()
 {
-	/*if (keyCode == SDLK_a)
-	{
-		m_CameraPosition -= normalize(cross(m_CameraFront, m_CameraUp) * cameraSpeed);
-	}
-	if (keyCode == SDLK_d)
-	{
-		m_CameraPosition += normalize(cross(m_CameraFront, m_CameraUp) * cameraSpeed);
-	}
-	if (keyCode == SDLK_w)
-	{
-		m_CameraPosition += cameraSpeed * m_CameraFront;
-	}
-	if (keyCode == SDLK_s)
-	{
-		m_CameraPosition -= cameraSpeed * m_CameraFront;
-	}*/
 
 }
 
-void MyGame::destroyScene()
+void MyGame::MoveMouse()
 {
-	for (auto& go : m_GameObjectList)
-	{
-		go->onDestroy();
-	}
-
-	m_GameObjectList.clear();
-
-}
-
-void MyGame::update()
-{
-	GameApplication::update();
-	
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	
+	//SDL_SetRelativeMouseMode(SDL_TRUE);
 	GLfloat currentFrame = SDL_GetTicks();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
 
 	cameraSpeed = 5.0f * deltaTime;
 
-	//Start move mouse code
 	int xpos, ypos;
 	SDL_GetMouseState(&xpos, &ypos);
 
@@ -224,8 +198,24 @@ void MyGame::update()
 	front.y = sin(radians(pitch));
 	front.z = sin(radians(yaw)) * cos(radians(pitch));
 	m_CameraFront = normalize(front);
+}
 
-	// End move mouse code
+void MyGame::destroyScene()
+{
+	for (auto& go : m_GameObjectList)
+	{
+		go->onDestroy();
+	}
+
+	m_GameObjectList.clear();
+
+}
+
+void MyGame::update()
+{
+	GameApplication::update();
+	
+	MoveMouse();
 
 	SDL_PumpEvents();
 
