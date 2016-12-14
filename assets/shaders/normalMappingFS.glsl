@@ -19,8 +19,8 @@ in vec3 lightDirectionOut;
 in mat3 tangentMatrix;
 
 
-uniform vec4 ambientMaterialColour=vec4(0.5f,0.0f,0.0f,1.0f);
-uniform float specularPower=25.0f;
+uniform vec4 ambientMaterialColour;
+uniform float specularPower;
 
 uniform sampler2D diffuseSampler;
 uniform sampler2D specularSampler;
@@ -33,14 +33,20 @@ void main()
 	bumpNormals = normalize(bumpNormals);
 	
 	vec3 lightDir=normalize(-directionLight.lightDirection);
-	float diffuseTerm = dot(bumpNormals, lightDir);
+	
+	float diffuseTerm = max(dot(bumpNormals, lightDir),0.0f);
 	vec3 halfWayVec = normalize(cameraDirectionOut + lightDir);
-	float specularTerm = pow(dot(bumpNormals, halfWayVec), specularPower);
+	float specularTerm = pow(max(dot(bumpNormals, halfWayVec),0.0f), specularPower);
 	
 	vec4 diffuseTextureColour = texture(diffuseSampler, vertexTextureCoordsOut);
 	vec4 specularTextureColour = texture (specularSampler, vertexTextureCoordsOut);
 	
+	vec4 ambientColour = ambientMaterialColour*directionLight.ambientColour;
+	vec4 diffuseColour = diffuseTextureColour*directionLight.diffuseColour *diffuseTerm;
+	vec4 specularColour = specularTextureColour*directionLight.specularColour*specularTerm;
+	//ambientColour.a=ambientMaterialColour.a;
+	//diffuseColour.a=diffuseTextureColour.a;
+	//specularColour.a=specularTextureColour.a;
 	
-
-	FragColor = (ambientMaterialColour*directionLight.ambientColour) + (diffuseTextureColour*directionLight.diffuseColour *diffuseTerm) + (specularTextureColour*directionLight.specularColour*specularTerm);
+	FragColor = (ambientColour + diffuseColour+ specularColour);
 }
