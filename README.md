@@ -1,6 +1,6 @@
 # Fantasy Scene - Graphics
 
-A graphics demo created in Visual Studio using C++ with OpenGL for Games Programming 2 coursework.
+A graphics demo created in Visual Studio using C++ with OpenGL for my Games Programming 2 coursework.
 
 # What I Learned
 
